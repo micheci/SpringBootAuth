@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -37,5 +39,15 @@ public class UserService {
         } else {
             return "fail";
         }
+    }
+
+    public Users findById(Long userId) {
+        Optional<Users> userOptional = repo.findById(Math.toIntExact(userId));
+        return userOptional.orElse(null); // Return null if the user is not found
+    }
+
+    public Users findByUsername(String username) {
+        // Call the repository method to find user by username
+        return repo.findByUsername(username);
     }
 }
