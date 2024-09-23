@@ -1,5 +1,7 @@
 package com.telusko.part29springsecex.service;
 
+import com.telusko.part29springsecex.dto.LoginResponse;
+import com.telusko.part29springsecex.dto.UserResponse;
 import com.telusko.part29springsecex.model.Users;
 import com.telusko.part29springsecex.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +34,22 @@ public class UserService {
         return user;
     }
 
-    public String verify(Users user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    public LoginResponse verify(Users user) {
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+        );
+
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            String token = jwtService.generateToken(user.getUsername());
+            Users loggedInUser = findByUsername(user.getUsername());
+            UserResponse userResponse = new UserResponse(loggedInUser.getId(), loggedInUser.getUsername());
+            return new LoginResponse(token, userResponse);
         } else {
-            return "fail";
+            throw new RuntimeException("Authentication failed");
         }
     }
+
+
 
     public Users findById(Long userId) {
         Optional<Users> userOptional = repo.findById(Math.toIntExact(userId));

@@ -134,6 +134,16 @@ public class UserExerciseController {
         return "Exercise added successfully";
     }
 
+    // Get all available exercises
+    @GetMapping("/exercises")
+    public ResponseEntity<?> getAllExercises() {
+        List<Exercises> exercises = exercisesRepo.findAll(); // Fetch all exercises
 
+        if (exercises.isEmpty()) {
+            return ResponseEntity.status(404).body("No exercises found");
+        }
+
+        return ResponseEntity.ok(exercises);
+    }
 
 }

@@ -1,13 +1,17 @@
 package com.telusko.part29springsecex.controller;
 
+import com.telusko.part29springsecex.dto.LoginResponse;
 import com.telusko.part29springsecex.model.Users;
 import com.telusko.part29springsecex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*")
+
 public class UserController {
 
     @Autowired
@@ -21,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users user) {
+    public LoginResponse login(@RequestBody Users user) {
         System.out.println((user));
         return service.verify(user);
     }
